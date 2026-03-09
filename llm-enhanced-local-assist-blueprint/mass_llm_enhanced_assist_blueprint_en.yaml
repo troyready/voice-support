@@ -519,8 +519,9 @@ actions:
         []) %} {% set areas = areas | join(''|'') if areas is list else areas %} {{
         area_names.split('', '') | select(''search'', areas, ignorecase=true) | map(''area_id'')
         | list if areas else [] }}'
-    llm_target: '{{ iif(llm_result.get(''target_data'', {}).get(''players'') or llm_result.get(''target_data'',
-      {}).get(''areas'')) }}'
+    llm_target: >-
+      {{ (llm_target_data.entity_id | length > 0) or
+        (llm_target_data.area_id | length > 0) }}
     device_area: '{{ area_id(trigger.device_id) if area_name(trigger.device_id) in
       area_names.split('', '') }}'
     default_player: !input default_player
